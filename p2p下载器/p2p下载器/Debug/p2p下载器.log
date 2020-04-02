@@ -1,0 +1,10 @@
+﻿生成启动时间为 2020/2/13 20:15:50。
+     1>项目“C:\Users\asus\Desktop\bite (1)\p2p下载器\p2p下载器\p2p下载器.vcxproj”在节点 2 上(Build 个目标)。
+     1>Link:
+         F:\vs2013\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\asus\Desktop\bite (1)\p2p下载器\Debug\p2p下载器.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\local\boost_1_72_0\lib64-msvc-12.0" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\asus\Desktop\bite (1)\p2p下载器\Debug\p2p下载器.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\asus\Desktop\bite (1)\p2p下载器\Debug\p2p下载器.lib" /MACHINE:X86 Debug\main.obj
+     1>LINK : fatal error LNK1104: 无法打开文件“libboost_filesystem-vc120-mt-gd-x32-1_72.lib”
+     1>已完成生成项目“C:\Users\asus\Desktop\bite (1)\p2p下载器\p2p下载器\p2p下载器.vcxproj”(Build 个目标)的操作 - 失败。
+
+生成失败。
+
+已用时间 00:00:00.68
