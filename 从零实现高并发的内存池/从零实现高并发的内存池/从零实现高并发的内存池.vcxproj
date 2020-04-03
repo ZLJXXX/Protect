@@ -71,9 +71,10 @@
     <ClInclude Include="ThreadCache.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BnechMark.cpp" />
     <ClCompile Include="CentralCache.cpp" />
     <ClCompile Include="PageCache.cpp" />
-    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="unitTest.cpp" />
     <ClCompile Include="ThreadCache.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

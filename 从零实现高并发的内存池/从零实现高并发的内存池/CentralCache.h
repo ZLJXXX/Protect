@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common.h"
-
+//单例模式
 class CentralCache
 {
 public:
@@ -13,8 +13,16 @@ public:
 
 	// 从spanlist 或者 page cache获取一个span
 	Span* GetOneSpan(size_t size);
+
+	static CentralCache& GetInsatnce()
+	{
+		static CentralCache inst;
+		return inst;
+	}
 private:
+	CentralCache()
+	{}
+	CentralCache(const CentralCache&) = delete;
 	SpanList _spanLists[NFREE_LIST];
 };
-
-static CentralCache centralCacheInst;
+//static CentralCache centralCacheInst;

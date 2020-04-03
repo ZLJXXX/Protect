@@ -3,28 +3,28 @@
 #include "ThreadCache.h"
 #include "PageCache.h"
 
-void* ConcurrentMalloc(size_t size)
+static void* ConcurrentMalloc(size_t size)
 {
-	if (size <= MAX_SIZE) // [1byte, 64kb]
+	if (size <= MAX_SIZE) // [1byte, 64kb] ->thread cache
 	{
 		if (pThreaCache == nullptr)
 		{
 			pThreaCache = new ThreadCache;
-			cout << std::this_thread::get_id() << "->" << pThreaCache << endl;
+			//cout << std::this_thread::get_id() << "->" << pThreaCache << endl;
 		}
 
 		return pThreaCache->Allocte(size);
 	}
-	else if (size <= ((MAX_PAGES-1)<<PAGE_SHIFT)) // (64kb, 128*4kb]
+	else if (size <= ((MAX_PAGES-1)<<PAGE_SHIFT)) // (64kb, 128*4kb]->pagecache
 	{
 		size_t align_size = SizeClass::_RoundUp(size, 1<<PAGE_SHIFT);
 		size_t pagenum = (align_size >> PAGE_SHIFT);
-		Span* span = pageCacheInst.NewSpan(pagenum);
+		Span* span = PageCache::GetInstance().NewSpan(pagenum);
 		span->_objSize = align_size;
 		void* ptr = (void*)(span->_pageid << PAGE_SHIFT);
 		return ptr;
 	}
-	else // [128*4kb,-]
+	else // [128*4kb,-] ->’“œµÕ≥∂—…œ…Í«Î
 	{
 		size_t align_size = SizeClass::_RoundUp(size, 1 << PAGE_SHIFT);
 		size_t pagenum = (align_size >> PAGE_SHIFT);
@@ -32,10 +32,10 @@ void* ConcurrentMalloc(size_t size)
 	}
 }
 
-void ConcurrentFree(void* ptr)
+static void ConcurrentFree(void* ptr)
 {
 	size_t pageid = (PAGE_ID)ptr >> PAGE_SHIFT;
-	Span* span = pageCacheInst.GetIdToSpan(pageid);
+	Span* span = PageCache::GetInstance().GetIdToSpan(pageid);
 	if (span == nullptr)// [128*4kb,-]
 	{
 		SystemFree(ptr);
@@ -49,6 +49,7 @@ void ConcurrentFree(void* ptr)
 	}
 	else if (size <= ((MAX_PAGES - 1) << PAGE_SHIFT)) // (64kb, 128*4kb]
 	{
-		pageCacheInst.ReleaseSpanToPageCache(span);
+		PageCache::GetInstance().ReleaseSpanToPageCache(span);
 	}
 }
+ 

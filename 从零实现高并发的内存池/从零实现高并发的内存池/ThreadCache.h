@@ -23,5 +23,5 @@ private:
 
 // ThreadCache* tclist = nullptr;
 // Ïß³ÌTLS Thread Local Storage
-
+//Linux tls
 _declspec (thread) static ThreadCache* pThreaCache = nullptr;

@@ -1,6 +1,6 @@
 #include "PageCache.h"
 
-Span* PageCache::NewSpan(size_t numpage)
+Span* PageCache:: _NewSpan(size_t numpage)
 {
 	//_spanLists[numpage].Lock();
 	if (!_spanLists[numpage].Empty())
@@ -48,9 +48,15 @@ Span* PageCache::NewSpan(size_t numpage)
 
 	_spanLists[bigspan->_pagesize].PushFront(bigspan);
 	
-	return NewSpan(numpage);
+	return _NewSpan(numpage);
 }
-
+Span* PageCache::NewSpan(size_t numpage)
+{
+	_mtx.lock();
+	Span* span = _NewSpan(numpage);
+	_mtx.unlock();
+	return span;
+}
 void PageCache::ReleaseSpanToPageCache(Span* span)
 {
 	// 向前合并
@@ -72,6 +78,11 @@ void PageCache::ReleaseSpanToPageCache(Span* span)
 		}
 
 		// 合并
+		//合并超过128页则不要合并
+		if (span->_pagesize + prevSpan->_pagesize >= MAX_PAGES)
+		{
+			break;
+		}
 		span->_pageid = prevSpan->_pageid;
 		span->_pagesize += prevSpan->_pagesize;
 		for (PAGE_ID i = 0; i < prevSpan->_pagesize; ++i)
@@ -101,6 +112,11 @@ void PageCache::ReleaseSpanToPageCache(Span* span)
 			break;
 		}
 
+		//合并超过128页则不要合并
+		if (span->_pagesize + nextSpan->_pagesize >= MAX_PAGES)
+		{
+			break;
+		}
 		span->_pagesize += nextSpan->_pagesize;
 		for (PAGE_ID i = 0; i < nextSpan->_pagesize; ++i)
 		{
